@@ -1,0 +1,51 @@
+server:
+  port: ${PORT:8080}
+  tomcat:
+    accesslog:
+      enabled: false
+    basedir: logs
+
+logging:
+  file:
+    name: logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 1GB
+      max-history: 365
+
+spring:
+  codec:
+    max-in-memory-size: 20MB
+  application:
+    name: demopostgis
+  profiles:
+    active: default
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+    hikari:
+      maximum-pool-size: 20
+      max-lifetime: 60000
+    tomcat:
+      test-while-idle: true
+      test-on-borrow: true
+      validation-query: SELECT 1
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: update
+        show_sql: true
+        format_sql: true
+        schema_update:
+          unique_constraint_strategy: RECREATE_QUIETLY
+        order_updates: true
+        jdbc:
+          batch_versioned_data: true
